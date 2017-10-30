@@ -1,0 +1,23 @@
+要求：把 192.168.16.179 机子上的/mysql_bak/*.sql 备份文件拷贝到 192.168.16.178 机子上
+
+192.168.16.179服务器上：
+
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
+
+注：如果ssh指令无效，执行以下指令后再执行：
+
+yum -y install openssh-clients
+
+
+192.168.16.178服务器上：
+mkdir -p ~/.ssh
+把 192.168.16.179 上的 id_rsa.pub 拷贝到 该机上， 重命名为：  authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+以上所有步骤完成后，在 192.168.16.179 执行指令（此时不需要密码）：
+
+scp /mysql_bak/*.sql root@192.168.16.178:/mysql_bak
+
+注： 两台服务器都要有openssh-clients才能进行 scp

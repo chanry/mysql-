@@ -1,0 +1,49 @@
+先对sh脚本赋予权限，如果是dos编码还要转为unix：
+
+vi 文件名
+:set fileformat=unix
+:w
+
+
+如果没有crond先安装：
+
+yum install crontabs
+
+添加定时任务有两种方式：
+1） 系统级别添加
+vi /etc/crontab
+#添加
+*/2 * * * * root /opt/TRS/sh/mariadbBackup.sh
+ 2） 针对当前用户添加
+
+crond -e
+进入vi操作：
+SHELL=/bin/bash
+*/2 * * * * root /opt/TRS/sh/mariadbBackup.sh
+
+重启：
+
+/sbin/service crond restart
+
+
+
+使用命令查询crontab 任务时，一直提示：no crontab for root 。查看了一些资料，说是crontab在初始时，设置了一次编辑方式，所以试了一下crontab -e的方式编辑，即在命令行，输入 crontab -e ,进行编辑页面，输入定量执行的脚本：
+
+*/2 * * * * root /opt/TRS/sh/mariadbBackup.sh
+  
+crontab -e的使用方式与vi编辑器相同， 配置成功后 使用命令crontab -u root -l 可以查看当前定时任务
+
+具体流程：
+
+cd etc
+
+在etc目录下，执行
+ 
+crontab -e
+ 
+在插入模式下输入 ：
+
+*/2 * * * * root /opt/TRS/sh/mariadbBackup.sh
+保存
+
+
